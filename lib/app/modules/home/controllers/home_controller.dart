@@ -36,8 +36,8 @@ class HomeController extends GetxController {
     clearForm();
   }
 
-  void toggleTodoStatus(int index) {
-    todoService.toggleTodoStatus(index);
+  void toggleTodoStatus(Todo todo) {
+    todoService.toggleTodoStatus(todo);
   }
 
   void removeTodoAt(int index) {

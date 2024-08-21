@@ -39,9 +39,19 @@ class TodoService extends GetxService {
     todos.removeAt(index);
   }
 
-  void toggleTodoStatus(int index) {
-    todos[index].isDone = !todos[index].isDone;
-    todos.refresh();
+  Future<void> toggleTodoStatus(Todo todo) async {
+    final response = await http.patch(
+      Uri.parse('http://localhost:3000/todos/${todo.id}/toggle'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: todo.toJson(),
+    );
+    if (response.statusCode == 200) {
+      await getTodos();
+    } else {
+      throw Exception('Failed to load todo');
+    }
   }
 
   Future<void> editTodo(int id, Todo todo) async {

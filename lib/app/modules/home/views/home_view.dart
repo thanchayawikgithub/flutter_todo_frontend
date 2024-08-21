@@ -37,7 +37,7 @@ class HomeView extends GetView<HomeController> {
                   Get.to(() => EditTodoView(index: index, todo: todo));
                 },
                 onLongPress: () {
-                  controller.toggleTodoStatus(index);
+                  controller.toggleTodoStatus(todo);
                   log('${todo.isDone}');
                 },
               ),
