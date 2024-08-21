@@ -1,15 +1,38 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:test_getx/app/data/todo.dart';
 
 class TodoService extends GetxService {
-  final todos = <Todo>[
-    Todo(title: 'Title 1', description: 'Description 1'),
-    Todo(title: 'Title 2', description: 'Description 2'),
-    Todo(title: 'Title 3', description: 'Description 3')
-  ].obs;
+  final todos = <Todo>[].obs;
 
-  void addTodo(Todo todo) {
-    todos.add(todo);
+  Future<void> getTodos() async {
+    final response = await http.get(Uri.parse('http://localhost:3000/todos'));
+    if (response.statusCode == 200) {
+      final list = json.decode(response.body);
+      final todoList = list.map<Todo>((item) => Todo.fromMap(item)).toList();
+      todos.assignAll(todoList);
+    } else {
+      throw Exception('Failed to load todo');
+    }
+  }
+
+  Future<void> addTodo(Todo todo) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:3000/todos'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: todo.toJson(),
+    );
+    if (response.statusCode == 201) {
+      await getTodos();
+      log(Todo.fromJson(response.body).toJson());
+    } else {
+      throw Exception('Failed to load todo');
+    }
   }
 
   void removeTodoAt(int index) {
