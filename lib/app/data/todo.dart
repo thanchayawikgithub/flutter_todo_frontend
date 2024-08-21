@@ -2,21 +2,25 @@
 import 'dart:convert';
 
 class Todo {
+  int? id;
   String title;
   String description;
   bool isDone;
   Todo({
+    this.id,
     required this.title,
     required this.description,
     this.isDone = false,
   });
 
   Todo copyWith({
+    int? id,
     String? title,
     String? description,
     bool? isDone,
   }) {
     return Todo(
+      id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       isDone: isDone ?? this.isDone,
@@ -25,6 +29,7 @@ class Todo {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'title': title,
       'description': description,
       'isDone': isDone,
@@ -33,6 +38,7 @@ class Todo {
 
   factory Todo.fromMap(Map<String, dynamic> map) {
     return Todo(
+      id: map['id'] != null ? map['id'] as int : null,
       title: map['title'] as String,
       description: map['description'] as String,
       isDone: map['isDone'] as bool,
@@ -45,18 +51,25 @@ class Todo {
       Todo.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'Todo(title: $title, description: $description, isDone: $isDone)';
+  String toString() {
+    return 'Todo(id: $id, title: $title, description: $description, isDone: $isDone)';
+  }
 
   @override
   bool operator ==(covariant Todo other) {
     if (identical(this, other)) return true;
 
-    return other.title == title &&
+    return other.id == id &&
+        other.title == title &&
         other.description == description &&
         other.isDone == isDone;
   }
 
   @override
-  int get hashCode => title.hashCode ^ description.hashCode ^ isDone.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        title.hashCode ^
+        description.hashCode ^
+        isDone.hashCode;
+  }
 }

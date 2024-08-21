@@ -30,7 +30,7 @@ class HomeView extends GetView<HomeController> {
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () {
-                    controller.removeTodoAt(index);
+                    controller.todoService.removeTodo(todo);
                   },
                 ),
                 onTap: () {

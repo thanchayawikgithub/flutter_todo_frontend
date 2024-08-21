@@ -44,8 +44,28 @@ class TodoService extends GetxService {
     todos.refresh();
   }
 
-  void editTodo(int index, Todo todo) {
-    todos[index] = todo;
-    todos.refresh();
+  Future<void> editTodo(int id, Todo todo) async {
+    final response = await http.patch(
+      Uri.parse('http://localhost:3000/todos/${todo.id}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: todo.toJson(),
+    );
+    if (response.statusCode == 200) {
+      await getTodos();
+    } else {
+      throw Exception('Failed to load todo');
+    }
+  }
+
+  Future<void> removeTodo(Todo todo) async {
+    final response =
+        await http.delete(Uri.parse('http://localhost:3000/todos/${todo.id}'));
+    if (response.statusCode == 200) {
+      await getTodos();
+    } else {
+      throw Exception('Failed to load todo');
+    }
   }
 }

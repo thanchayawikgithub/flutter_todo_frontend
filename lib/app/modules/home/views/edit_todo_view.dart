@@ -60,7 +60,7 @@ class EditTodoView extends StatelessWidget {
                     if (todo == null) {
                       controller.addNewTodo();
                     } else {
-                      controller.editTodo(index!);
+                      controller.editTodo(todo!.id!);
                     }
                   }
                   Get.back();

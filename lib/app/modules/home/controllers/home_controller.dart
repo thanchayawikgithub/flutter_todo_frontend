@@ -26,10 +26,11 @@ class HomeController extends GetxController {
     clearForm();
   }
 
-  void editTodo(int index) {
+  void editTodo(int id) {
     todoService.editTodo(
-        index,
+        id,
         Todo(
+            id: id,
             title: titleController.text,
             description: descriptionController.text));
     clearForm();
